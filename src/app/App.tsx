@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 const VIDEO_A_URL =
-  "https://youtu.be/D56yS01zuB0";
+  "https://www.youtube.com/embed/D56yS01zuB0?autoplay=1";
 const VIDEO_B_URL =
-  "https://youtu.be/pesD5cRGQnY";
+  "https://www.youtube.com/embed/pesD5cRGQnY?autoplay=0";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
