@@ -119,7 +119,7 @@ function TopBar() {
           </div>
           <div>
             <div className="text-white text-xs font-medium leading-none">
-              J. Morrison
+              A. Chen
             </div>
             <div className="text-white/50 text-[10px] leading-none mt-0.5">
               APS Policy Officer · EL1
