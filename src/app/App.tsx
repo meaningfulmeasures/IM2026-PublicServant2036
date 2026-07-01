@@ -115,7 +115,7 @@ function TopBar() {
         <div className="w-px h-4 bg-white/20" />
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white text-[10px] font-bold">
-            JM
+            AC
           </div>
           <div>
             <div className="text-white text-xs font-medium leading-none">
