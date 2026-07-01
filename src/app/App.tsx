@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
+const VIDEO_A_URL =
+  "https://environmentnswgov-my.sharepoint.com/:v:/g/personal/anabelle_chen_dpie_nsw_gov_au/IQDhEb0VfOkQQpeK5kRqnC_jAYH3pQlS-iWuCKtkmvOZU_k?e=4iZNOD";
+const VIDEO_B_URL =
+  "https://environmentnswgov-my.sharepoint.com/:v:/g/personal/anabelle_chen_dpie_nsw_gov_au/IQDRxOdqzofBTpWKIE4yH1K0ASqkqW8FYpuwzYydtd-QxhI?e=DtdCUF";
+
 // ─── Types ─────────────────────────────────────────────────────────────────
 
 type Phase = "dashboard" | "halt" | "message";
@@ -184,12 +189,7 @@ function StatusBadge({ type }: { type: "info" | "success" | "warn" }) {
 
 // ─── Now Playing panel (Video A) ───────────────────────────────────────────
 
-interface NowPlayingProps {
-  videoRef: React.RefObject<HTMLVideoElement | null>;
-  playing: boolean;
-}
-
-function NowPlaying({ videoRef, playing }: NowPlayingProps) {
+function NowPlaying({ playing }: { playing: boolean }) {
   return (
     <div className="bg-white border border-[rgba(26,31,46,0.1)] rounded overflow-hidden flex flex-col">
       {/* Header */}
@@ -226,18 +226,18 @@ function NowPlaying({ videoRef, playing }: NowPlayingProps) {
         </span>
       </div>
 
-      {/* Video */}
+      {/* Iframe or idle state */}
       <div className="relative bg-[#0d1117] aspect-video">
-        <video
-          ref={videoRef as React.RefObject<HTMLVideoElement>}
-          src="https://example.com/video/phase1-interaction.mp4"
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-        />
-        {!playing && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#0d1117]/80">
+        {playing ? (
+          <iframe
+            src={VIDEO_A_URL}
+            className="w-full h-full border-0"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+            title="Phase 1 — Bludging Window"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#0d1117]">
             <div className="flex flex-col items-center gap-2">
               <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
                 <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
@@ -256,7 +256,9 @@ function NowPlaying({ videoRef, playing }: NowPlayingProps) {
           AI Operations · Background Channel
         </div>
         <div className="text-[10px] text-[#5a6478] mt-0.5">
-          {playing ? "Playing while AI resolves tasks" : "Press Auto-Resolve to begin"}
+          {playing
+            ? "Playing while AI resolves tasks"
+            : "Press Auto-Resolve to begin"}
         </div>
       </div>
     </div>
@@ -267,17 +269,11 @@ function NowPlaying({ videoRef, playing }: NowPlayingProps) {
 
 interface DashboardProps {
   onComplete: () => void;
-  videoRef: React.RefObject<HTMLVideoElement | null>;
   videoPlaying: boolean;
   onFirstResolve: () => void;
 }
 
-function Dashboard({
-  onComplete,
-  videoRef,
-  videoPlaying,
-  onFirstResolve,
-}: DashboardProps) {
+function Dashboard({ onComplete, videoPlaying, onFirstResolve }: DashboardProps) {
   const [taskIndex, setTaskIndex] = useState(0);
   const [resolved, setResolved] = useState(false);
   const [resolving, setResolving] = useState(false);
@@ -553,7 +549,7 @@ function Dashboard({
               </div>
 
               {/* Now Playing (Video A) */}
-              <NowPlaying videoRef={videoRef} playing={videoPlaying} />
+              <NowPlaying playing={videoPlaying} />
             </div>
           </div>
         </main>
@@ -699,7 +695,6 @@ function Halt({ onProceed }: HaltProps) {
 
 interface MessageProps {
   onRestart: () => void;
-  videoRef: React.RefObject<HTMLVideoElement | null>;
 }
 
 function FadeLine({
@@ -739,7 +734,7 @@ function FadeLine({
   );
 }
 
-function Message({ onRestart, videoRef }: MessageProps) {
+function Message({ onRestart }: MessageProps) {
   const [visible, setVisible] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [videoVisible, setVideoVisible] = useState(false);
@@ -781,26 +776,21 @@ function Message({ onRestart, videoRef }: MessageProps) {
         }`}
       >
         <div className="relative bg-black rounded overflow-hidden aspect-video border border-white/10">
-          <video
-            ref={videoRef as React.RefObject<HTMLVideoElement>}
-            src="https://example.com/video/post-judgement-epilogue.mp4"
-            playsInline
-            className="w-full h-full object-cover"
-          />
-          {/* Placeholder overlay shown because the src won't load */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] gap-3">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <circle cx="20" cy="20" r="19" stroke="white" strokeOpacity="0.15" strokeWidth="1" />
-              <path d="M15 12l16 8-16 8V12z" fill="white" fillOpacity="0.25" />
-            </svg>
-            <span className="text-white/20 text-xs font-mono">
-              post-judgement-epilogue.mp4
-            </span>
-          </div>
+          {videoVisible && (
+            <iframe
+              src={VIDEO_B_URL}
+              className="w-full h-full border-0"
+              allow="autoplay; fullscreen"
+              allowFullScreen
+              title="Epilogue — Post Judgement"
+            />
+          )}
         </div>
         <div className="flex items-center justify-between mt-2 px-1">
           <span className="text-white/20 text-[10px] font-mono">EPILOGUE</span>
-          <span className="text-white/15 text-[10px] font-mono">AUDIO ENABLED</span>
+          <span className="text-white/15 text-[10px] font-mono">
+            AUDIO ENABLED
+          </span>
         </div>
       </div>
 
@@ -823,41 +813,23 @@ export default function App() {
   const [phase, setPhase] = useState<Phase>("dashboard");
   const [videoAPlaying, setVideoAPlaying] = useState(false);
 
-  const videoARef = useRef<HTMLVideoElement>(null);
-  const videoBRef = useRef<HTMLVideoElement>(null);
-
-  // First resolve: play Video A
+  // First resolve: mount Video A iframe
   const handleFirstResolve = useCallback(() => {
-    if (!videoAPlaying) {
-      setVideoAPlaying(true);
-      videoARef.current?.play().catch(() => {});
-    }
-  }, [videoAPlaying]);
+    setVideoAPlaying(true);
+  }, []);
 
-  // Dashboard complete → Phase 2: pause Video A
+  // Dashboard complete → Phase 2: unmount Video A iframe (pauses it)
   const handleDashboardComplete = useCallback(() => {
-    videoARef.current?.pause();
     setPhase("halt");
   }, []);
 
-  // Halt → Phase 3: play Video B with audio
+  // Halt → Phase 3: mount Video B iframe
   const handleHaltProceed = useCallback(() => {
     setPhase("message");
-    // Small delay so the element is mounted and ref is attached
-    setTimeout(() => {
-      if (videoBRef.current) {
-        videoBRef.current.muted = false;
-        videoBRef.current.play().catch(() => {});
-      }
-    }, 500);
   }, []);
 
-  // Restart: stop Video B, reset Video A state, return to Phase 1
+  // Restart: unmount Video B, reset Video A, return to Phase 1
   const handleRestart = useCallback(() => {
-    if (videoBRef.current) {
-      videoBRef.current.pause();
-      videoBRef.current.currentTime = 0;
-    }
     setVideoAPlaying(false);
     setPhase("dashboard");
   }, []);
@@ -877,7 +849,6 @@ export default function App() {
           <div className="h-full flex flex-col animate-fade-in">
             <Dashboard
               onComplete={handleDashboardComplete}
-              videoRef={videoARef}
               videoPlaying={videoAPlaying}
               onFirstResolve={handleFirstResolve}
             />
@@ -890,7 +861,7 @@ export default function App() {
         )}
         {phase === "message" && (
           <div className="h-full">
-            <Message onRestart={handleRestart} videoRef={videoBRef} />
+            <Message onRestart={handleRestart} />
           </div>
         )}
       </div>
