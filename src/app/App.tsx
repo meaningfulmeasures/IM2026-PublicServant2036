@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 const VIDEO_A_URL =
-  "https://environmentnswgov-my.sharepoint.com/:v:/g/personal/anabelle_chen_dpie_nsw_gov_au/IQDhEb0VfOkQQpeK5kRqnC_jAYH3pQlS-iWuCKtkmvOZU_k?e=4iZNOD";
+  "https://youtu.be/D56yS01zuB0";
 const VIDEO_B_URL =
-  "https://environmentnswgov-my.sharepoint.com/:v:/g/personal/anabelle_chen_dpie_nsw_gov_au/IQDRxOdqzofBTpWKIE4yH1K0ASqkqW8FYpuwzYydtd-QxhI?e=DtdCUF";
+  "https://youtu.be/pesD5cRGQnY";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
